@@ -72,6 +72,7 @@ button:active {
   transform: scale(0.97);
 }
 
+/* ===== VOLUME REGGAE ===== */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
@@ -81,6 +82,12 @@ input[type="range"] {
   border-radius: 10px;
   background: linear-gradient(to right, #008000, #ffff00, #ff0000);
   outline: none;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 10px;
+  background: linear-gradient(to right, #008000, #ffff00, #ff0000);
 }
 
 input[type="range"]::-webkit-slider-thumb {
@@ -93,6 +100,7 @@ input[type="range"]::-webkit-slider-thumb {
   margin-top: -6px;
   cursor: pointer;
 }
+/* ========================== */
 
 .music-name {
   margin-top: 20px;
@@ -169,11 +177,19 @@ function toggleRadio(){
   }
 }
 
+/* ===== NOW PLAYING ZENO ===== */
+
 async function atualizarMusica() {
   try {
-    const resposta = await fetch("https://empty-water-d350.xandi-xni.workers.dev/");
+    const resposta = await fetch("https://api.zeno.fm/mounts/metadata/4yhhgfnjxgwuv");
     const dados = await resposta.json();
-    music.innerText = dados.musica || "Ao Vivo";
+
+    if (dados && dados.streamTitle) {
+      music.innerText = dados.streamTitle;
+    } else {
+      music.innerText = "Ao Vivo";
+    }
+
   } catch (erro) {
     music.innerText = "Ao Vivo";
   }
@@ -184,8 +200,7 @@ setInterval(atualizarMusica, 15000);
 
 if("serviceWorker" in navigator){
   navigator.serviceWorker.register("./sw.js");
-}
-</script>
+}</script>
 
 </body>
 </html>
