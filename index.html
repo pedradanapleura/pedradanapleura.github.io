@@ -65,18 +65,39 @@ button {
   color: #000;
   font-weight: bold;
   cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  margin-top: 10px;
+  height: 8px;
+  border-radius: 10px;
+  background: linear-gradient(to right, #008000, #ffff00, #ff0000);
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #f5c542;
+  border-radius: 50%;
+  margin-top: -6px;
+  cursor: pointer;
 }
 
 .music-name {
   margin-top: 20px;
   font-size: 14px;
   color: #ccc;
-}
-
-.listeners {
-  margin-top: 10px;
-  color: #1db954;
-  font-size: 14px;
 }
 
 .whatsapp {
@@ -89,6 +110,7 @@ button {
   border-radius: 50px;
   font-weight: bold;
   text-decoration: none;
+  box-shadow: 0 0 20px rgba(0,0,0,0.6);
 }
 </style>
 </head>
@@ -115,7 +137,6 @@ button {
   </div>
 
   <div class="music-name" id="music">Carregando música...</div>
-  <div class="listeners" id="listeners">?? Ouvintes agora: 0</div>
 </div>
 
 <a class="whatsapp" href="https://wa.me/5551983457216" target="_blank">
@@ -127,7 +148,6 @@ const radio = document.getElementById("radio");
 const volume = document.getElementById("volume");
 const playBtn = document.getElementById("playBtn");
 const music = document.getElementById("music");
-const listeners = document.getElementById("listeners");
 
 radio.volume = 0.7;
 
@@ -149,19 +169,13 @@ function toggleRadio(){
   }
 }
 
-/* ===== DADOS PELO WORKER ===== */
-
 async function atualizarMusica() {
   try {
     const resposta = await fetch("https://empty-water-d350.xandi-xni.workers.dev/");
     const dados = await resposta.json();
-
     music.innerText = dados.musica || "Ao Vivo";
-    listeners.innerText = "?? Ouvintes agora: " + (dados.ouvintes || 0);
-
   } catch (erro) {
     music.innerText = "Ao Vivo";
-    listeners.innerText = "?? Ouvintes agora: 0";
   }
 }
 
