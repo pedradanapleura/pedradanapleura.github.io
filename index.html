@@ -218,6 +218,9 @@ async function atualizarMusica() {
 atualizarMusica();
 
 setInterval(atualizarMusica, 15000);
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./service-worker.js");
+}
 
 </script>
 
