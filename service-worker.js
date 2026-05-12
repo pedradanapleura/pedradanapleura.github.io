@@ -1,11 +1,13 @@
-const CACHE_NAME = "pedrada-cache-v1";
+const CACHE_NAME = "pedrada-cache-v2";
 
 const urlsToCache = [
   "/",
   "/index.html",
-  "/manifest.json",
-  "/logo-192.png",
-  "/logo-512.png"
+  "/site.webmanifest",
+  "/android-chrome-192x192.png",
+  "/android-chrome-512x512.png",
+  "/favicon-32x32.png",
+  "/apple-touch-icon.png"
 ];
 
 self.addEventListener("install", event => {
@@ -18,7 +20,19 @@ self.addEventListener("install", event => {
 });
 
 self.addEventListener("activate", event => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cache => {
+          if (cache !== CACHE_NAME) {
+            return caches.delete(cache);
+          }
+        })
+      );
+    })
+  );
+
+  self.clients.claim();
 });
 
 self.addEventListener("fetch", event => {
