@@ -1,9 +1,10 @@
 {
-  "name": "Lion Roots Radio",
-  "short_name": "Lion Roots",
+  "name": "Pedrada na Pleura",
+  "short_name": "Pedrada",
   "theme_color": "#000000",
   "background_color": "#000000",
   "display": "standalone",
+  "start_url": "/",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
