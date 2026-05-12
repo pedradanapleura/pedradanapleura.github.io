@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Pedrada na Pleura</title>
 
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="manifest" href="/site.webmanifest">
-<meta name="theme-color" content="#000000">
 
+<meta name="theme-color" content="#000000">
 
 <style>
 body {
@@ -129,7 +130,10 @@ input[type="range"]::-webkit-slider-thumb {
 </header>
 
 <div class="player-box">
-    <audio id="radio" src="https://stream.zeno.fm/4yhhgfnjxgwuv"></audio>
+
+    <audio id="radio" preload="none">
+        <source src="https://stream.zeno.fm/4yhhgfnjxgwuv.mp3" type="audio/mpeg">
+    </audio>
 
     <button id="playBtn" onclick="toggleRadio()">🔥 ROOTS PLAY</button>
 
@@ -139,6 +143,7 @@ input[type="range"]::-webkit-slider-thumb {
     </div>
 
     <div class="music-name" id="music">Carregando música...</div>
+
 </div>
 
 <a class="whatsapp" href="https://wa.me/5551983457216" target="_blank">
@@ -146,6 +151,7 @@ input[type="range"]::-webkit-slider-thumb {
 </a>
 
 <script>
+
 const radio = document.getElementById("radio");
 const volume = document.getElementById("volume");
 const playBtn = document.getElementById("playBtn");
@@ -160,36 +166,59 @@ volume.addEventListener("input", function() {
 let playing = false;
 
 function toggleRadio(){
+
     if(!playing){
-        radio.play();
-        playing = true;
-        playBtn.innerHTML = "⏸ PAUSAR";
+
+        radio.play().then(() => {
+
+            playing = true;
+            playBtn.innerHTML = "⏸ PAUSAR";
+
+        }).catch(err => {
+
+            console.log(err);
+            alert("Toque novamente para iniciar a rádio");
+
+        });
+
     } else {
+
         radio.pause();
         playing = false;
         playBtn.innerHTML = "🔥 ROOTS PLAY";
+
     }
 }
 
 async function atualizarMusica() {
+
     try {
+
         const resposta = await fetch("https://api.zeno.fm/mounts/metadata/4yhhgfnjxgwuv");
+
         const dados = await resposta.json();
+
         if (dados && dados.streamTitle) {
+
             music.innerText = dados.streamTitle;
+
         } else {
+
             music.innerText = "Ao Vivo";
+
         }
+
     } catch (erro) {
+
         music.innerText = "Ao Vivo";
+
     }
 }
 
 atualizarMusica();
+
 setInterval(atualizarMusica, 15000);
 
-// service worker desativado temporariamente
-}
 </script>
 
 </body>
